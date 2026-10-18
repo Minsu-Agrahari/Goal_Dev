@@ -52,13 +52,14 @@ function block_1_basicServer() {
                 console.log ('------------------------------------------');
                 
                 const menuRes = await fetch (`${base}/menu`);
-                console.log('Get /menu', JSON.stringify(menuRes));
+                const menuData = await menuRes.json()
+                console.log('Get /menu', menuData);
 
                 console.log ('------------------------------------------');
 
                 const searchRes = await fetch (`${base}/search?q=biryani&limit=5`);
                 const searchData = await searchRes.json();
-                console.log('GET /search'. JSON.stringify(searchData));
+                console.log('GET /search', JSON.stringify(searchData));
 
                 console.log('---------------------------------------------');
                 
@@ -123,7 +124,7 @@ function block_2_response () {
         })
 
         app.get('/old-menu', (req, res) => {
-            res.redirect(301, '/new-menu');
+            res.redirect(301, '/no-content');
         })
 
         app.get('/xml', (req, res) => {
@@ -150,7 +151,7 @@ function block_2_response () {
 
         const server = app.listen (0, async () => {
             const port = server.address().port;
-            const base = `http://270.0.0.1:${port}`;
+            const base = `http://127.0.0.1:${port}`;
 
             console.log(`Server is running ${port} || URL ${base}`);
 
@@ -159,50 +160,49 @@ function block_2_response () {
                 console.log ('------------------------------------------');
                 
                 const textRes = await fetch (`${base}/text`);
-                const textData = textRes.json();
+                const textData = await textRes.text();
                 console.log(`Get /text`, JSON.stringify(textData));
 
                 console.log ('------------------------------------------');
                 
                 const jsonRes = await fetch (`${base}/json`);
-                const jsonData = jsonRes.json();
+                const jsonData = await jsonRes.json();
                 console.log(`Get /json`, jsonData);
 
                 console.log ('------------------------------------------');
                 
                 const notFoundRes = await fetch (`${base}/not-found`);
-                const notFoundData = notFoundRes.json();
+                const notFoundData = await notFoundRes.json();
                 console.log('Get /not-Found', notFoundData);
 
                 console.log ('------------------------------------------');
                 
                 const healthRes = await fetch (`${base}/health`);
-                const healthData = healthRes.json();
+                const healthData = await healthRes.text();
                 console.log('Get /health', healthData);
 
                 console.log ('------------------------------------------');
                 
                 const oldMenuRes = await fetch (`${base}/old-menu`);
-                const oldMenuData = oldMenuRes.json();
+                const oldMenuData = await oldMenuRes.json();
                 console.log('Get /old-menu', oldMenuData);
 
                 console.log ('------------------------------------------');
                 
                 const xmlRes = await fetch (`${base}/xml`);
-                const xmlData = xmlRes.json();
+                const xmlData = await xmlRes.text();
                 console.log('Get /xml', xmlData);
 
                 console.log ('------------------------------------------');
                 
-                const customHeaderRes = await fetch (`${base}/custom-headers`);
-                const customHeaderData = customHeaderRes.json();
-                console.log('Get /custom-headers', customHeaderData);
+                const customHeaderRes = await fetch (`${base}/custom-header`);
+                const customHeaderData = await customHeaderRes.json();
+                console.log('Get /custom-header', customHeaderData);
 
                 console.log ('------------------------------------------');
                 
                 const noContentRes = await fetch (`${base}/no-content`);
-                const noContentData = noContentRes.json();
-                console.log('Get /no-content', noContentData);
+                console.log('Get /no-content', noContentData.status);
                 
                 console.log ('------------------------------------------');
                 
@@ -210,6 +210,11 @@ function block_2_response () {
             } catch (error) {
                 console.log(error);
             }
+
+            server.close(() => {
+                console.log("Block 2 served ....");
+                resolve();
+            });
         })
 
     })
