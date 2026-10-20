@@ -207,7 +207,18 @@ function block_1_httpMethod () {
         })
 
         // * server closed
+        server.close( () => {
+            console.log('Server 1 closed .... ');
+            resolve();
+        })
 
     })
 }
 
+async function main () {
+    await block_1_httpMethod()
+
+    process.exit(0)
+}
+
+main();
