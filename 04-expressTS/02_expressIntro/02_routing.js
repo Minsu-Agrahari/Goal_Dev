@@ -112,7 +112,98 @@ function block_1_httpMethod () {
             const port = server.address().port;
             const base = `http://127.0.0.1:${port}`;
 
+            try {
+                console.log('------------------------------------');
+
+                const listRes = await fetch(`${base}/routes`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ routes })
+                });
+                const listData = await listRes.json();
+                console.log('GET /routes', listData);
+                
+                console.log('------------------------------------');
+                
+                const routeIdRes = await fetch(`${base}/routes/:id`, {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ routes })
+                });
+                const routeIdData = await routeIdRes.json();
+                console.log('GET /routes/:id', routeIdData);
+
+                console.log('------------------------------------');
+                
+                const newEntryRes = await fetch (`${base}/routes`, {
+                    method: 'POST',
+                    headers:{
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: 'Colaba-Worli',
+                        direction: 'South'
+                    })
+                });
+                const newEntryData = await newEntryRes.json();
+                console.log('POST /routes', newEntryData);
+                
+                console.log('------------------------------------');
+                
+                const updateRoutesRes = await fetch (`${base}/routes/:id`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: 3,
+                        name: 'Colaba-Worli',
+                        direction: 'South'
+                    })
+                });
+                const updateRoutesData = await updateRoutesRes.json();
+                console.log('POST /routes/:id', updateRoutesData);
             
+                
+                console.log('------------------------------------');
+                
+                const updateRoutesIDRes = await fetch (`${base}/routes/:id`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: 2,
+                        direction: 'East-South'
+                    })
+                });
+                const updateRoutesIDData = await updateRoutesIDRes.json();
+                console.log('PATCH /routes/:id', updateRoutesIDData);
+                
+                console.log('------------------------------------');
+            
+                const deleteRoutesRes = await fetch (`${base}/routes/:id`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify ({
+                        id : 1
+                    })
+                });
+                const deleteRoutesData = await deleteRoutesRes.json();
+                console.log('Delete /routes/:id', deleteRoutesData);
+                
+                console.log('------------------------------------');
+            
+            
+            } catch (error) {
+                console.log(error);
+            }
         })
 
         // * server closed
