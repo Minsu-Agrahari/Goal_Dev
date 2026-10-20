@@ -25,7 +25,7 @@ function block_1_httpMethod () {
 
         // List all trains
         app.get('/routes', ( _ , res) => {
-            res.json(Object.values(routes));
+            return res.json(Object.values(routes));
         })
 
         // single routes by id
@@ -34,12 +34,12 @@ function block_1_httpMethod () {
 
             // id ! in routes
             if (!Object.keys(routes).includes(id)){
-                res.status(404).json({error: 'id is not in list'});
+                return res.status(404).json({error: 'id is not in list'});
             }
 
             const route = routes[id];
 
-            res.status(200).json(route);
+            return res.status(200).json(route);
         })
         
         // new entry
@@ -47,12 +47,12 @@ function block_1_httpMethod () {
             //! no validation done
 
             const newRoute = {
+                ...req.body,
                 id: nextId++,
-                ...req.body
             }
 
             routes[newRoute.id] = newRoute;
-            res.status(201).json(newRoute);
+            return res.status(201).json(newRoute);
         })
 
         // update the route
@@ -86,8 +86,8 @@ function block_1_httpMethod () {
 
             routes[id] = {
                 ...routes[id],
+                id: Number(id),
                 ...req.body,
-                id: Number(id)
             }
 
             return res.status(200).json(routes[id]);
@@ -95,11 +95,12 @@ function block_1_httpMethod () {
 
         // delete the route
         app.delete('/routes/:id', (req, res) => {
+            const id = req.params.id;
+
             if (!routes[id]) {
-                return res.status(400).json({errror: 'Route not found'});
+                return res.status(400).json({ errror: 'Route not found' });
             }
 
-            const id = req.params.id;
 
             delete routes[id];
 
@@ -155,7 +156,7 @@ function block_1_httpMethod () {
                 console.log('------------------------------------');
                 
                 const updateRoutesRes = await fetch (`${base}/routes/:id`, {
-                    method: 'POST',
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -203,14 +204,15 @@ function block_1_httpMethod () {
             
             } catch (error) {
                 console.log(error);
+            } finally {
+                // * server closed
+                server.close( () => {
+                    console.log('Server 1 closed .... ');
+                    resolve();
+                })
             }
         })
 
-        // * server closed
-        server.close( () => {
-            console.log('Server 1 closed .... ');
-            resolve();
-        })
 
     })
 }
