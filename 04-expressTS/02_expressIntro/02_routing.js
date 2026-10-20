@@ -217,8 +217,41 @@ function block_1_httpMethod () {
     })
 }
 
+function block_1_httpMethod_otherWay () {
+    return new Promise ((resolve) => {
+
+        const app = express();
+        app.use(express.json());
+
+        //* wildcard
+            //? /files/docs/readme.txt
+            //? /files/assets/style.css
+
+        app.get('/file/*filepath', (req, res) => {
+            const filepath = req.params.filepath
+            res.json({
+                filepath,
+                type: 'wildcard'
+            })
+        })
+
+        // routes
+        app
+            .route ('/schedule')
+            .get ((req, res) => {})
+            .post ((req, res) => {})
+            .put ((req, res) => {})
+            .delete((req, res) => {})
+
+            // middleware
+        app
+            .use("/api", (req, res) => {})
+    })
+}
+
 async function main () {
     await block_1_httpMethod()
+    await block_1_httpMethod_otherWay()
 
     process.exit(0)
 }
