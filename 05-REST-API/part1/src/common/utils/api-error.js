@@ -1,24 +1,26 @@
-class ApiResponse {
+class ApiError extends Error {
 
-    static ok (res, message, data = null) {
-        return res.status(200).json({
-            success: true,
-            message,
-            data
-        })
+    constructor (statusCode, message) {
+
+        super(message);
+
+        this.statusCode = statusCode;
+        this.isOperational = true;
+
+        Error.captureStackTrace(this, this.constructor);
     }
 
-    static create (res, message, data = null) {
-        return res.status(201).json({
-            success: true,
-            message,
-            data
-        })
+    static badRequest (message = 'Bad Request') {
+        return new ApiError(400, message);
     }
 
-    static noContent (res) {
-        return res.status(204).send();
+    static unauthorized (message = "Unauthorized") {
+        return new ApiError (401, message);
+    }
+
+    static conflict (message = "Conflict") {
+        return new ApiError (409, message);
     }
 }
 
-export default ApiResponse;
+export default ApiError;
