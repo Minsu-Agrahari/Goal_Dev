@@ -9,7 +9,7 @@ class BaseDto {
             stripUnknown: true,
         })
 
-        if (error   ) {
+        if (error) {
             const error = error.details.map ((d) => d.message)
 
             return {
