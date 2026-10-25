@@ -1,6 +1,14 @@
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 
+// Hashing Token
+const hashToken = (token) => {
+    return crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+}
+
 // Generate Reset Token
 const generateResetToken = () => {
     
@@ -36,6 +44,7 @@ const verifyRefreshToken = (token) => {
 };
 
 export {
+    hashToken,
     generateResetToken,
     generateAccessToken,
     verifyAccessToken,
