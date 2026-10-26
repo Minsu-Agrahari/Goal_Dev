@@ -1,10 +1,11 @@
 import ApiError from "../../common/utils/api-error.js";
 import {
-    hashToken
+    hashToken,
     generateAccessToken,
     verifyAccessToken,
     generateRefreshToken,
-    verifyRefreshToken
+    verifyRefreshToken,
+    generateResetToken
 } from "../../common/utils/jwt.utils.js"
 import User from "./auth.model.js";
 
@@ -71,16 +72,50 @@ const login = async ({email, password}) => {
     };
 }
 
-const refresh = async (token) => {
+const logout = async (userId) => {
+    const user = await User.findById (userId);
 
-    // if (!token) throw ApiError.unauthorized("Refresh token missing");
-    
-    // const decoded = verifyRefreshToken(token);
+    if (!user) throw ApiError.unauthorized("User not found");
 
-    // const user = await User.findById(decoded.id).select("+refreshToken");
-    // if (!user) throw ApiError.unauthorized("User not found");
-
-    // if (user.refreshtoken)
+    user.refreshtoken = undefined;
+    await user.save ({validationBeforeSave: false});
 }
 
-export {register}
+const refresh = async (token) => {
+
+    if (!token) throw ApiError.unauthorized("Refresh token missing");
+    const decode = verifyRefreshToken(token);
+
+    const user = await User.findById(decode.id).select("+refreshToken");
+    if (!user) throw ApiError.unauthorized("User not found");
+
+    if (user.refreshtoken !== hashToken(token)) {
+        throw ApiError.unauthorized("Invalid refresh token");
+    }
+
+    const accessToken = generateAccessToken({ id: user._id, role: user.role });
+
+    return { accessToken };
+}
+
+const forgotPassword = async (email) => {
+    const user = await User.findOne({email});
+
+    if (!user) throw ApiError.notfound("No account with that email");
+
+    const { rawToken, hashedToken } = generateResetToken();
+    user.resetPasswordtoken = hashedToken;
+    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
+
+    await user.save();
+
+    // TODO: mail bhejna hai (abhi nahi aata hai)
+}
+
+export {
+    register,
+    login,
+    logout,
+    refresh,
+    forgotPassword
+}
