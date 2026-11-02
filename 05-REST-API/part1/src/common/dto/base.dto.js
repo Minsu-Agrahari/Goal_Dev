@@ -11,17 +11,10 @@ class BaseDto {
 
         if (error) {
             const error = error.details.map ((d) => d.message)
-
-            return {
-                error, 
-                value: null
-            }
+            return { error, value: null }
         }
 
-        return {
-            error: null,
-            value
-        }
+        return { error: null, value };
     }
 }
 

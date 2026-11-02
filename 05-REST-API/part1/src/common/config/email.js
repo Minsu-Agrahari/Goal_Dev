@@ -38,13 +38,12 @@ const sendMail = async (to, subject, html) => {
     });
 };
 
-const sendVerificationEmail = async (to, subject, html, token) => {
+const sendVerificationEmail = async (emailTo, token) => {
     await transporter.sendMail ({
         from: `${process.env.SMTP_FROM_EMAIL}`,
-        to,
+        emailTo,
         subject,
         html,
-        token
     });
 };
 
