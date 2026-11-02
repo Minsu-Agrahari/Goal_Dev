@@ -1,66 +1,53 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
-const userSchema = new mongoose.Schema({
-    // Personal Identify Information
+const userSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        trim: true,
-        minlength: 4,
-        maxlength: 50,
-        required: [true, "Name is required"]
+      type: String,
+      required: [true, "Name is required"],
+      trim: true,
+      minlength: 2,
+      maxlength: 50,
     },
     email: {
-        type: String,
-        trim: true,
-        unique: true,
-        lowercase: true,
-        required: [true, "Email is required"]
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      lowercase: true,
+      trim: true,
     },
     password: {
-        type: String,
-        minlength: 8,
-        required: [true, "Password is required"],
-        select: false
+      type: String,
+      required: [true, "Password is required"],
+      minlength: 8,
+      select: false,
     },
     role: {
-        type: String,
-        trim: true,
-        enum: ["Customer", "Vendor", "Admin"],
-        default: "Customer",
-        required: [true, "Name is required"]
+      type: String,
+      enum: ["customer", "seller", "admin", "support"],
+      default: "customer",
     },
     isVerified: {
-        type: boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
+    verificationToken: { type: String, select: false },
+    refreshToken: { type: String, select: false },
+    resetPasswordToken: { type: String, select: false },
+    resetPasswordExpires: { type: Date, select: false },
+  },
+  { timestamps: true },
+);
 
-    // Token
-    verificationToken: {
-        type: String,
-        select: false
-    },
-    refreshtoken: {
-        type: String,
-        select: false
-    },
-    resetPasswordtoken: {
-        type: String,
-        select: false
-    },
-    resetPasswordExpires: {
-        type: String,
-        select: false
-    }
-}, {timestamps: true});
+// Hash password before saving
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+  this.password = await bcrypt.hash(this.password, 12);
+});
 
-userSchema.pre("save", async function (next) {
-    if(!this.isModified("password")) return next();
-    this.password = await bcrypt.hash(this.password, 12);
-    next();
-})
-
-userSchema.methods.comparePassword = async function (clearTextPassword) {
-    return bcrypt.compare(clearTextPassword, this.password);
-}
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
 
 export default mongoose.model("User", userSchema);
