@@ -14,7 +14,7 @@ class RegisterDto extends BaseDto {
         role: Joi.string()
                     .valid("Customer", "Vendor")
                     .default("Customer")
-    })
-}
+    });
+};
 
 export default RegisterDto;
