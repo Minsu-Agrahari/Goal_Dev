@@ -1,4 +1,3 @@
-// import DtoClass from "../dto/base.dto.js";
 import ApiError from "../utils/api-error.js";
 
 const validate = (DtoClass) => {

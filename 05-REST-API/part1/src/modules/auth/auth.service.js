@@ -1,4 +1,5 @@
 import ApiError from "../../common/utils/api-error.js";
+import User from "./auth.model.js";
 import {
     hashToken,
     generateAccessToken,
@@ -7,7 +8,6 @@ import {
     verifyRefreshToken,
     generateResetToken
 } from "../../common/utils/jwt.utils.js"
-import User from "./auth.model.js";
 
 const register = async ({name, email, password, role}) => {
 
