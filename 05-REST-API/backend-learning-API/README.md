@@ -1,4 +1,4 @@
-# REST API — Part 1
+# REST API — Backend-API-Development
 
 A Node.js and Express API project for user authentication, backed by MongoDB and Mongoose. The code defines registration, login, token, email-verification, and password-reset flows.
 
