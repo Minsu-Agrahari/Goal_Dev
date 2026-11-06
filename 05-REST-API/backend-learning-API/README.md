@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # REST API — Backend-API-Development
+=======
+# REST API — Backend-Learning-API
+>>>>>>> f41e274 (update README.md to reflect project name change and improve formatting)
 
 A Node.js and Express API project for user authentication, backed by MongoDB and Mongoose. The code defines registration, login, token, email-verification, and password-reset flows.
 
@@ -44,18 +48,18 @@ cp env.example .env
 
 Update `.env` with values for your environment. The application reads:
 
-| Variable | Purpose | Runtime behavior |
-| --- | --- | --- |
-| `PORT` | HTTP port | Defaults to `5000` when unset |
-| `NODE_ENV` | Environment mode | Used for the startup log and secure refresh-cookie setting |
-| `MONGODB_URI` | MongoDB connection URI | Required by the database connection helper |
-| `JWT_ACCESS_SECRET` | Signs and verifies access tokens | Must be set for token operations |
-| `JWT_ACCESS_EXPIRES_IN` | Access-token lifetime | Defaults to `15m` |
-| `JWT_REFRESH_SECRET` | Signs and verifies refresh tokens | Must be set for token operations |
-| `JWT_REFRESH_EXPIRES_IN` | Refresh-token lifetime | Defaults to `7d` |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | SMTP connection settings | `SMTP_PORT` defaults to `587` |
-| `SMTP_FROM_NAME`, `SMTP_FROM_EMAIL` | Email sender identity | Used in the `From` header |
-| `CLIENT_URL` | Base URL for verification and reset links | Used to construct email links |
+| Variable                                                   | Purpose                                   | Runtime behavior                                           |
+| ---------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------- |
+| `PORT`                                                   | HTTP port                                 | Defaults to `5000` when unset                            |
+| `NODE_ENV`                                               | Environment mode                          | Used for the startup log and secure refresh-cookie setting |
+| `MONGODB_URI`                                            | MongoDB connection URI                    | Required by the database connection helper                 |
+| `JWT_ACCESS_SECRET`                                      | Signs and verifies access tokens          | Must be set for token operations                           |
+| `JWT_ACCESS_EXPIRES_IN`                                  | Access-token lifetime                     | Defaults to `15m`                                        |
+| `JWT_REFRESH_SECRET`                                     | Signs and verifies refresh tokens         | Must be set for token operations                           |
+| `JWT_REFRESH_EXPIRES_IN`                                 | Refresh-token lifetime                    | Defaults to `7d`                                         |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | SMTP connection settings                  | `SMTP_PORT` defaults to `587`                          |
+| `SMTP_FROM_NAME`, `SMTP_FROM_EMAIL`                    | Email sender identity                     | Used in the `From` header                                |
+| `CLIENT_URL`                                             | Base URL for verification and reset links | Used to construct email links                              |
 
 `env.example` currently uses `SMTP_FOR_NAME` and `SMTP_FOR_EMAIL`; the email module instead reads `SMTP_FROM_NAME` and `SMTP_FROM_EMAIL`. Rename those keys in `.env` to the names the code reads. Replace the example port and token-secret values with valid values. Do not commit real credentials or secrets.
 
@@ -76,16 +80,16 @@ The project also defines `npm run db:up` and `npm run db:down` for Docker Compos
 
 The Express app mounts the auth router at `/api/v1/auth`. These endpoints are declared in `src/modules/auth/auth.routes.js`; their declaration does not mean they are currently operational.
 
-| Method | Path | Purpose | Route behavior in code |
-| --- | --- | --- | --- |
-| `POST` | `/api/v1/auth/register` | Register a user | DTO validation, then registration controller |
-| `POST` | `/api/v1/auth/login` | Authenticate a user | DTO validation, then login controller |
-| `POST` | `/api/v1/auth/refresh-token` | Issue a new access token | Reads the refresh token from the `refreshToken` cookie |
-| `POST` | `/api/v1/auth/logout` | Clear the stored refresh token | Requires authentication middleware |
-| `GET` | `/api/v1/auth/verify-email/:token` | Verify an email address | Passes the URL token to the auth service |
-| `POST` | `/api/v1/auth/forgot-password` | Request a password-reset email | DTO validation, then forgot-password controller |
-| `PUT` | `/api/v1/auth/reset-password/:token` | Set a new password | DTO validation, then reset-password controller |
-| `GET` | `/api/v1/auth/me` | Get the current user profile | Requires authentication middleware |
+| Method   | Path                                   | Purpose                        | Route behavior in code                                   |
+| -------- | -------------------------------------- | ------------------------------ | -------------------------------------------------------- |
+| `POST` | `/api/v1/auth/register`              | Register a user                | DTO validation, then registration controller             |
+| `POST` | `/api/v1/auth/login`                 | Authenticate a user            | DTO validation, then login controller                    |
+| `POST` | `/api/v1/auth/refresh-token`         | Issue a new access token       | Reads the refresh token from the `refreshToken` cookie |
+| `POST` | `/api/v1/auth/logout`                | Clear the stored refresh token | Requires authentication middleware                       |
+| `GET`  | `/api/v1/auth/verify-email/:token`   | Verify an email address        | Passes the URL token to the auth service                 |
+| `POST` | `/api/v1/auth/forgot-password`       | Request a password-reset email | DTO validation, then forgot-password controller          |
+| `PUT`  | `/api/v1/auth/reset-password/:token` | Set a new password             | DTO validation, then reset-password controller           |
+| `GET`  | `/api/v1/auth/me`                    | Get the current user profile   | Requires authentication middleware                       |
 
 The refresh token is returned by the login service and set by the controller in an `httpOnly`, `sameSite: "strict"` cookie. It is marked `secure` when `NODE_ENV` is `production`. The access token is included in the login JSON response. The service stores a hash of the refresh token in the user record.
 
