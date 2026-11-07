@@ -13,4 +13,9 @@ const signupPayloadModel = z.object({
                .regex(/[^A-Za-z0-9]/, "Needs a Special Character")
 });
 
-export default signupPayloadModel;
+const signinPayloadModel = z.object({
+    email: z.email().toLowerCase(),
+    password: z.string().min(6)
+});
+
+export default { signupPayloadModel, signinPayloadModel };
