@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const signupPayloadModel = z.object({
+export const signupPayloadModel = z.object({
     firstName: z.string().trim().min(2, "Too short").max(50),
     lastName: z.string().trim().max(50).optional(),
     email: z.email("Invalid email").trim().toLowerCase(),
@@ -13,9 +13,7 @@ const signupPayloadModel = z.object({
                .regex(/[^A-Za-z0-9]/, "Needs a Special Character")
 });
 
-const signinPayloadModel = z.object({
+export const signinPayloadModel = z.object({
     email: z.email().toLowerCase(),
     password: z.string().min(6)
 });
-
-export default { signupPayloadModel, signinPayloadModel };
