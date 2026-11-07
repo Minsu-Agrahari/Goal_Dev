@@ -2,6 +2,7 @@ import type { Request, Response } from 'express'
 import { signinPayloadModel, signupPayloadModel } from './models'
 import { userTable } from '../../db/schema'
 import { db } from '../../db/index'
+import { eq } from 'drizzle-orm'
 
 class AuthenticationController {
     public async handleSigup(req: Request, res: Response) {
@@ -20,6 +21,6 @@ class AuthenticationController {
         // de-structure the object
         const { firstName, lastName, email, password } = validationResult.data;
 
-        const userEmailResult = await db
+        // const userEmailResult = await db.select().from(userTable).where(eq(userTable.email, email));
     }
 }
