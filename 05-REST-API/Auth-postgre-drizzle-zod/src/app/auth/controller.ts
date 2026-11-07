@@ -52,3 +52,5 @@ class AuthenticationController {
                   })
     }
 }
+
+export default AuthenticationController;
