@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm'
 import { createHmac, randomBytes } from 'node:crypto'
 
 class AuthenticationController {
-    public async handleSigup(req: Request, res: Response) {
+    public async handleSignup(req: Request, res: Response) {
         
         const validationResult = await signupPayloadModel.safeParseAsync(req.body);
 
@@ -51,6 +51,8 @@ class AuthenticationController {
                     }
                   })
     }
+
+    public async handleSignin
 }
 
 export default AuthenticationController;

@@ -9,4 +9,4 @@ const authenticationController = new AuthenticationController();
 export const authRouter: Router = express.Router();
 
 // Routes
-authRouter.post('/sign-up', authenticationController.handleSigup.bind(authenticationController));
+authRouter.post('/sign-up', authenticationController.handleSignup.bind(authenticationController));
