@@ -96,7 +96,23 @@ class AuthenticationController {
 
     }
 
-    
+    public async handleMe (req: Request, res: Response) {
+        // @ts-ignore
+        const { id } = req.user;
+
+        const [userResult] = await db.select().from(userTable).where(eq(userTable.id, id));
+
+        if (!userResult) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.json({
+            firstName: userResult.firstName,
+            lastName: userResult.lastName,
+            email: userResult.email
+        })
+
+    }
 }
 
 export default AuthenticationController;
