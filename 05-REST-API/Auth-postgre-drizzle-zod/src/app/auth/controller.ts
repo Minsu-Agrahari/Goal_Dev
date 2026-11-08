@@ -4,6 +4,7 @@ import { userTable } from '../../db/schema'
 import { db } from '../../db/index'
 import { eq } from 'drizzle-orm'
 import { createHmac, randomBytes } from 'node:crypto'
+import { createUserToken } from './utils/token'
 
 class AuthenticationController {
     public async handleSignup (req: Request, res: Response) {
@@ -86,9 +87,16 @@ class AuthenticationController {
                       });
         }
 
-        
+        const token = createUserToken ({ id: userSelect.id });
+
+        return res.json ({
+            message: 'Signin Success',
+            data: { token }
+        });
 
     }
+
+    
 }
 
 export default AuthenticationController;
