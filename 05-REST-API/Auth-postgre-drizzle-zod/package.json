@@ -5,8 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index",
+    
     "build": "tsc -p .",
     "dev": "tsc-watch --onSuccess \"node dist/index\"",
+    
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    
     "studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
